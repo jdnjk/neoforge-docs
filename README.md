@@ -2,7 +2,8 @@
 
 This repository is used to store documentation on NeoForge, the Minecraft modding API. It also contains documentation on NeoGradle, a Gradle plugin for developing NeoForge and mods using NeoForge.
 
-The documentation is built using [Docusaurus 3](https://docusaurus.io)
+The documentation is built using [Docusaurus 3](https://docusaurus.io)  
+[![Netlify Status](https://api.netlify.com/api/v1/badges/70a112b5-3189-4e3d-b4be-945cfd5b3a8b/deploy-status)](https://app.netlify.com/sites/zh-neoforge/deploys)
 
 ## Contributing
 
