@@ -45,7 +45,7 @@ function UnmaintainedVersionLabel({
         versionLabel: <b>{versionMetadata.label}</b>,
       }}>
       {
-        'This is documentation for {siteTitle} {versionLabel}, which is no longer actively maintained.'
+        '这是关于 {siteTitle} {versionLabel}, 它不再被积极维护。'
       }
     </Translate>
   );
@@ -64,7 +64,7 @@ function LTSVersionLabel({
         versionLabel: <b>{versionMetadata.label}</b>,
       }}>
       {
-        'This is documentation for {siteTitle} {versionLabel}, which is currently the LTS version.'
+        '这是关于 {siteTitle} {versionLabel}, 目前是LTS版本。'
       }
     </Translate>
   );
@@ -112,7 +112,7 @@ function LatestVersionSuggestionLabel({
         ),
       }}>
       {
-        'For up-to-date documentation, see the {latestVersionLink} ({versionLabel}).'
+        '有关最新文档，请参阅 {latestVersionLink} ({versionLabel}).'
       }
     </Translate>
   );

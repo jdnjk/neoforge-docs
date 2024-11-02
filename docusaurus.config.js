@@ -6,8 +6,8 @@ const darkTheme = themes.vsDark;
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "NeoForged docs",
-  tagline: "The better mod loader",
+  title: "NeoForged文档",
+  tagline: "更好的模组加载器",
   favicon: "img/favicon.ico",
 
   // Set the production url of your site here
@@ -18,8 +18,8 @@ const config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: "neoforged", // Usually your GitHub org/user name.
-  projectName: "documentation", // Usually your repo name.
+  organizationName: "jdnjk", // Usually your GitHub org/user name.
+  projectName: "neoforge-docs", // Usually your repo name.
 
   onBrokenLinks: "throw", // Yay multi versioned-docs sites
   onBrokenMarkdownLinks: "throw",
@@ -28,8 +28,8 @@ const config = {
   // metadata like html lang. For example, if your site is Chinese, you may want
   // to replace "en" with "zh-Hans".
   i18n: {
-    defaultLocale: "en",
-    locales: ["en"],
+    defaultLocale: "zh-Hans",
+    locales: ["zh-Hanz"],
   },
 
   presets: [
@@ -105,14 +105,14 @@ const config = {
             type: "docSidebar",
             sidebarId: "mainSidebar",
             position: "left",
-            label: "NeoForge Documentation",
+            label: "NeoForge文档",
           },
           {
             type: "docSidebar",
             sidebarId: "ngSidebar",
             position: "left",
             docsPluginId: "neogradle",
-            label: "NeoGradle Documentation",
+            label: "NeoGradle文档",
           },
           {
             type: "docsVersionDropdown",
@@ -125,11 +125,11 @@ const config = {
           },
           {
             to: "/contributing",
-            label: "Contributing",
+            label: "贡献",
             position: "right",
           },
           {
-            href: "https://github.com/neoforged/documentation",
+            href: "https://github.com/jdnjk/neoforge-docs",
             label: "GitHub",
             position: "right",
           },
@@ -139,19 +139,19 @@ const config = {
         style: "dark",
         links: [
           {
-            title: "Docs",
+            title: "文档",
             items: [
               {
                 to: "/docs/gettingstarted/",
-                label: "NeoForge Documentation",
+                label: "NeoForge文档",
               },
               {
                 to: "/neogradle/docs/",
-                label: "NeoGradle Documentation",
+                label: "NeoGradle文档",
               },
               {
                 to: "/contributing",
-                label: "Contributing to the Documentation"
+                label: "为文档做出贡献"
               }
             ],
           },
@@ -163,17 +163,17 @@ const config = {
                 href: "https://discord.neoforged.net/",
               },
               {
-                label: "Main Website",
+                label: "官网",
                 href: "https://neoforged.net/",
               },
               {
                 label: "GitHub",
-                href: "https://github.com/neoforged/documentation",
+                href: "https://github.com/jdnjk/neoforge-docs",
               },
             ],
           },
         ],
-        copyright: `Copyright © 2016, under the MIT license. Built with Docusaurus.`,
+        copyright: `Copyright © 2016, 在MIT license下。使用Docusaurus驱动。`,
       },
       prism: {
         theme: lightTheme,
