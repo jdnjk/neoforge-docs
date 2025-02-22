@@ -2,13 +2,13 @@
 sidebar_position: 0
 ---
 
-# NeoGradle Documentation
+# NeoGradle 文档
 
-This is the official documentation for [NeoGradle], a [Gradle] plugin for developing [NeoForge] and mods using NeoForge.
+这是 [NeoGradle] 的官方文档，一个用于开发 [NeoForge] 及其 Mod 的 [Gradle] 插件。
 
-This documentation is _only_ for NeoForge, **this is not a Java, Groovy/Kotlin, or Gradle tutorial**.
+本文档**仅适用于 NeoForge**，**不**是 Java、Groovy/Kotlin 或 Gradle 的教程。
 
-If you would like to contribute to the docs, read [Contributing to the Docs][contributing].
+如果您想为文档做出贡献，请阅读 [贡献指南][contributing]。
 
 ## Adding the Plugin
 
