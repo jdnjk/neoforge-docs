@@ -1,4 +1,5 @@
 # NeoForged Documentation
+[![Netlify Status](https://api.netlify.com/api/v1/badges/70a112b5-3189-4e3d-b4be-945cfd5b3a8b/deploy-status)](https://app.netlify.com/sites/zh-neoforge/deploys)
 
 This repository is used to store documentation on NeoForge, the Minecraft modding API. It also contains documentation on NeoGradle, a Gradle plugin for developing NeoForge and mods using NeoForge.
 
