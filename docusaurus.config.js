@@ -192,15 +192,6 @@ const config = {
         darkTheme: darkTheme,
         additionalLanguages: ["java", "gradle", "toml", "groovy", "kotlin", "javascript", "json", "json5", "properties"],
       },
-      algolia: {
-        // The application ID provided by Algolia
-        appId: '',
-  
-        // Public API key: it is safe to commit it
-        apiKey: '',
-  
-        indexName: ''
-      },
     }),
 
     markdown: {
