@@ -1,4 +1,4 @@
-# Block Entities
+# 方块实体
 
 Block entities allow the storage of data on [blocks][block] in cases where [block states][blockstate] are not suitable. This is especially the case for data with a non-finite amount of options, such as inventories. Block entities are stationary and bound to a block, but otherwise share many similarities with entities, hence the name.
 

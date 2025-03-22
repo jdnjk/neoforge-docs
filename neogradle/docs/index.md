@@ -2,7 +2,7 @@
 sidebar_position: 0
 ---
 
-# NeoGradle Documentation
+# NeoGradle 文档
 
 This is the official documentation for [NeoGradle], a [Gradle] plugin for developing [NeoForge] and mods using NeoForge.
 

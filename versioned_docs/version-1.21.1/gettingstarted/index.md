@@ -1,8 +1,8 @@
 # Getting Started with NeoForge
 
-This section includes information about how to set up a NeoForge workspace, and how to run and test your mod.
+​本节包含有关如何设置 NeoForge 工作区以及如何运行和测试您的模组的信息。
 
-## Prerequisites
+## 事项准备
 
 - Familiarity with the Java programming language, specifically its object-oriented, polymorphic, generic, and functional features.
 - An installation of the Java 21 Development Kit (JDK) and 64-bit Java Virtual Machine (JVM). NeoForge recommends and officially supports the [Microsoft builds of OpenJDK][jdk], but any other JDK should work as well.
