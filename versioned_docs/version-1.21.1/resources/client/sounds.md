@@ -1,102 +1,100 @@
-# Sounds
+# 音效
 
-Sounds, while not required for anything, can make a mod feel much more nuanced and alive. Minecraft offers you various ways to register and play sounds, which will be laid out in this article.
+虽然音效并非必需的，但它们能让模组体验更加细腻生动。Minecraft提供了多种音效注册与播放方式，本文将详细介绍这些机制。
 
-## Terminology
+## 术语定义
 
-The Minecraft sound engine uses a variety of terms to refer to different things:
+Minecraft音效系统使用以下专业术语：
 
-- **Sound event**: A sound event is an in-code trigger that tells the sound engine to play a certain sound. `SoundEvent`s are also the things you register to the game.
-- **Sound category** or **sound source**: Sound categories are rough groupings of sounds that can be individually toggled. The sliders in the sound options GUI represent these categories: `master`, `block`, `player` etc. In code, they can be found in the `SoundSource` enum.
-- **Sound definition**: A mapping of a sound event to one or multiple sound objects, plus some optional metadata. Sound definitions are located in a namespace's [`sounds.json` file][soundsjson].
-- **Sound object**: A JSON object consisting of a sound file location, plus some optional metadata.
-- **Sound file**: An on-disk sound file. Minecraft only supports `.ogg` sound files.
+- **音效事件(SoundEvent)**：游戏内触发音效播放的代码事件，需注册到游戏系统中
+- **音效分类/音源(SoundSource)**：音效的逻辑分组（对应声音设置中的滑块），包括`master`、`block`、`player`等枚举值
+- **音效定义(SoundDefinition)**：在`sounds.json`中定义音效事件与具体音频文件的映射关系
+- **音效对象(SoundObject)**：JSON对象，包含音频文件路径及元数据
+- **音频文件**：仅支持`.ogg`格式的物理文件
 
 :::danger
-Due to the implementation of OpenAL (Minecraft's audio library), for your sound to have attenuation - that is, for it to get quieter and louder depending on the player's distance to it -, your sound file must be mono (single channel). Stereo (multichannel) sound files will not be subject to attenuation and always play at the player's location, making them ideal for ambient sounds and background music. See also [MC-146721][bug].
+由于OpenAL音频库的实现限制，要实现距离衰减效果（音量随玩家距离变化），必须使用单声道音频文件。立体声音频不受衰减影响，适合环境音效和背景音乐。详见[MC-146721][bug]
 :::
 
-## Creating `SoundEvent`s
+## 创建音效事件
 
-`SoundEvent`s are [registered objects][registration], meaning that they must be registered to the game through a `DeferredRegister` and be singletons:
+音效事件属于[注册对象][registration]，需通过`DeferredRegister`注册为单例：
 
 ```java
 public class MySoundsClass {
-    // Assuming that your mod id is examplemod
+    // 假设模组id为examplemod
     public static final DeferredRegister<SoundEvent> SOUND_EVENTS =
             DeferredRegister.create(BuiltInRegistries.SOUND_EVENT, "examplemod");
     
-    // All vanilla sounds use variable range events.
+    // 标准音效事件（支持距离衰减）
     public static final DeferredHolder<SoundEvent, SoundEvent> MY_SOUND = SOUND_EVENTS.register(
-            "my_sound", // must match the resource location on the next line
+            "my_sound", // 需与下一行ResourceLocation匹配
             () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath("examplemod", "my_sound"))
     );
     
-    // There is a currently unused method to register fixed range (= non-attenuating) events as well:
+    // 固定距离音效事件（无衰减）:
     public static final DeferredHolder<SoundEvent, SoundEvent> MY_FIXED_SOUND = SOUND_EVENTS.register("my_fixed_sound",
-            // 16 is the default range of sounds. Be aware that due to OpenAL limitations,
-            // values above 16 have no effect and will be capped to 16.
+            // 16为默认衰减范围，超过16的值会被限制
             () -> SoundEvent.createFixedRangeEvent(ResourceLocation.fromNamespaceAndPath("examplemod", "my_fixed_sound"), 16)
     );
 }
 ```
 
-Of course, don't forget to add your registry to the [mod event bus][modbus] in the [mod constructor][modctor]:
+当然,别忘记你的添加注册到[模组事件总线][modbus]的[模组构造函数][modctor]:
 
 ```java
 public ExampleMod(IEventBus modBus) {
     MySoundsClass.SOUND_EVENTS.register(modBus);
-    // other things here
+    // 其他的东西
 }
 ```
-
-And voilà, you have a sound event!
+瞧，你会有一个声音事件!
 
 ## `sounds.json`
 
-_See also: [sounds.json][mcwikisounds] on the [Minecraft Wiki][mcwiki]_
+_参阅: [sounds.json][mcwikisounds] on the [Minecraft Wiki][mcwiki]_
 
-Now, to connect your sound event to actual sound files, we need to create sound definitions. All sound definitions for a namespace are stored in a single file named `sounds.json`, also known as the sound definitions file, directly in the namespace's root. Every sound definition is a mapping of sound event id (e.g. `my_sound`) to a JSON sound object. Note that the sound event ids do not specify a namespace, as that is already determined by the namespace the sound definitions file is in. An example `sounds.json` would look something like this:
+为了将声音事件连接到实际的声音文件，我们需要创建声音定义。所有声音定义存储在命名空间根目录中的一个名为`sounds.json`的文件中，也称为声音定义文件。每个声音定义将声音事件ID（例如`my_sound`）映射到一个JSON声音对象。请注意，声音事件ID不指定命名空间，因为声音定义文件所在的命名空间已经决定了命名空间:
 
 ```json5
 {
-    // Sound definition for the sound event "examplemod:my_sound"
+    // 声音事件"examplemod:my_sound"的声音定义可以像以下格式来描述
     "my_sound": {
-        // List of sound objects. If this contains more than one element, an element will be chosen randomly.
+        // 声音对象的列表。如果此列表包含多个元素，将会随机选择一个元素进行播放。
         "sounds": [
-            // Only name is required, all other properties are optional.
+            // 只有名称是必须的，其他都是可选的
             {
-                // Location of the sound file, relative to the namespace's sounds folder.
-                // This example references a sound at assets/examplemod/sounds/sound_1.ogg.
+                // 声音文件的位置，相对于命名空间的sounds文件夹。
+                // 例如，此例子引用了位于assets/examplemod/sounds/sound_1.ogg的声音文件。
                 "name": "examplemod:sound_1",
-                // May be "sound" or "event". "sound" causes the name to refer to a sound file.
-                // "event" causes the name to refer to another sound event. Defaults to "sound".
+                // 可以是“sound”或“event”。“sound”使名称引用一个声音文件。
+                // “event”使名称引用另一个声音事件。默认值为“sound”。
                 "type": "sound",
-                // The volume this sound will be played at. Must be between 0.0 and 1.0 (default).
+                // 该声音播放时的音量，必须介于0.0到1.0之间（默认值）。
                 "volume": 0.8,
-                // The pitch value the sound will be played at.
-                // Must be between 0.0 and 2.0. Defaults to 1.0.
+                // 该声音播放时的音调值。
+                // 必须介于0.0到2.0之间，默认值为1.0。
                 "pitch": 1.1,
-                // Weight of this sound when choosing a sound from the sounds list. Defaults to 1.
+                // 在从声音列表中选择声音时的权重，默认值为1。
                 "weight": 3,
-                // If true, the sound will be streamed from the file instead of loaded all at once.
-                // Recommended for sound files that are more than a few seconds long. Defaults to false.
+                // 如果为 true，则该声音将从文件中流式播放，而不是一次性加载。
+                // 建议用于长度超过几秒的声音文件。默认值为 false。
                 "stream": true,
-                // Manual override for the attenuation distance. Defaults to 16. Ignored by fixed range sound events.
+                // 衰减距离的手动覆盖值，默认值为16。固定范围声音事件将忽略此设置。
                 "attenuation_distance": 8,
-                // If true, the sound will be loaded into memory on pack load, instead of when the sound is played.
-                // Vanilla uses this for underwater ambience sounds. Defaults to false.
+                // 如果为 true，则该声音将在资源包加载时被加载到内存中，而不是在播放时加载。
+                // 原版将其用于水下环境音效。默认值为 false。
                 "preload": true
             },
-            // Shortcut for { "name": "examplemod:sound_2" }
+            // 简写为 { "name": "examplemod:sound_2" }
             "examplemod:sound_2"
         ]
     },
     "my_fixed_sound": {
-        // Optional. If true, replaces sounds from other resource packs instead of adding to them.
-        // See the Merging chapter below for more information.
+        // 可选项。如果为 true，则会替换其他资源包中的声音，而不是将其添加到声音列表中。
+        // 有关详细信息，请参见下面的“合并”章节。
         "replace": true,
-        // The translation key of the subtitle displayed when this sound event is triggered.
+        // 触发该声音事件时显示的字幕的翻译键。
         "subtitle": "examplemod.my_fixed_sound",
         "sounds": [
             "examplemod:sound_1",
@@ -106,11 +104,11 @@ Now, to connect your sound event to actual sound files, we need to create sound 
 }
 ```
 
-### Merging
+### 合并
 
-Unlike most other resource files, `sounds.json` do not overwrite values in packs below them. Instead, they are merged together and then interpreted as one combined `sounds.json` file. Consider sounds `sound_1`, `sound_2`, `sound_3` and `sound_4` being defined in two `sounds.json` files from two different resource packs RP1 and RP2, where RP2 is placed below RP1:
+与大多数其他资源文件不同，`sounds.json`不会覆盖其下方资源包中的值。相反，它们会合并在一起，然后被解释为一个组合的`sounds.json`文件。例如，假设声音`sound_1`、`sound_2`、`sound_3`和`sound_4`在两个来自不同资源包的`sounds.json`文件中定义，分别是 RP1 和 RP2，其中 RP2 位于 RP1 之下：
 
-`sounds.json` in RP1:
+RP1 中的`sounds.json`：
 
 ```json5
 {
@@ -139,7 +137,7 @@ Unlike most other resource files, `sounds.json` do not overwrite values in packs
 }
 ```
 
-`sounds.json` in RP2:
+RP2 中的`sounds.json`：
 
 ```json5
 {
@@ -168,7 +166,7 @@ Unlike most other resource files, `sounds.json` do not overwrite values in packs
 }
 ```
 
-The combined (merged) `sounds.json` file the game would then go on and use to load sounds would look something look this (only in memory, this file is never written anywhere):
+合并后的`sounds.json`文件是游戏最终用来加载声音的内容，类似如下格式（仅在内存中存在，此文件不会被写入任何地方）：
 
 ```json5
 {
