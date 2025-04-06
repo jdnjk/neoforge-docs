@@ -107,7 +107,7 @@ const config = {
       // Replace with your project's social card
       //image: 'img/docusaurus-social-card.jpg',
       navbar: {
-        title: "Homepage",
+        title: "主页",
         logo: {
           alt: "NeoForged Logo",
           src: "img/logo.svg",
@@ -117,14 +117,14 @@ const config = {
             type: "docSidebar",
             sidebarId: "mainSidebar",
             position: "left",
-            label: "NeoForge Documentation",
+            label: "NeoForge 文档",
           },
           {
             type: "docSidebar",
             sidebarId: "ngSidebar",
             position: "left",
             docsPluginId: "neogradle",
-            label: "NeoGradle Documentation",
+            label: "NeoGradle 文档",
           },
           {
             type: "docsVersionDropdown",
@@ -137,7 +137,7 @@ const config = {
           },
           {
             to: "/contributing",
-            label: "Contributing",
+            label: "贡献",
             position: "right",
           },
           {
