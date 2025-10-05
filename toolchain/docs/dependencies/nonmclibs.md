@@ -4,20 +4,20 @@ sidebar_position: 1
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Non-Minecraft Dependencies
+# 非 Minecraft 依赖项
 
-Non-Minecraft dependencies are artifacts that are neither a mod nor a dependency Minecraft or NeoForge itself relies on. By default, NeoForge does not load non-Minecraft dependencies when loading a mod. For development environments, they must be added as a runtime dependencies, while production environments should make use of the [jar-in-jar system][jij].
+非 Minecraft 依赖项是指既不是模组，也不是 Minecraft 或 NeoForge 本身依赖的工件。默认情况下，NeoForge 在加载模组时不会加载非 Minecraft 依赖项。在开发环境中，它们必须作为运行时依赖项添加，而在生产环境中应使用 [jar-in-jar 系统][jij]。
 
-For example, you can add the `com.example:example` library to all runs like so:
+例如，您可以像下面这样将 `com.example:example` 库添加到所有运行中：
 
 <Tabs defaultValue="mdg">
 <TabItem value="mdg" label="ModDevGradle">
 
 ```gradle
 dependencies {
-    // This is still required to add the library at compile time
+    // 仍然需要在编译时添加库
     implementation 'com.example:example:1.0'
-    // This adds the library to all the runs
+    // 将库添加到所有运行中
     additionalRuntimeClasspath 'com.example:example:1.0'
 }
 ```
@@ -40,13 +40,13 @@ runs {
 }
 ```
 
-Or, you can use a configuration:
+或者，您可以使用配置：
 
 ```gradle
 configurations {
     libraries
-    // This will make sure that all dependencies that you add to the libraries configuration will also be added to the implementation configuration
-    // This way, you only need one dependency declaration for both runtime and compile dependencies
+    // 确保您添加到 libraries 配置中的所有依赖项也会添加到 implementation 配置中
+    // 这样，您只需要为运行时和编译依赖项声明一次依赖
     implementation.extendsFrom libraries
 }
 
@@ -68,7 +68,7 @@ runs {
 </Tabs>
 
 :::tip
-If you instead only want to add a runtime dependency to one specific run:
+如果您只想将运行时依赖项添加到某个特定运行中：
 
 <Tabs defaultValue="mdg">
 <TabItem value="mdg" label="ModDevGradle">
@@ -76,7 +76,7 @@ If you instead only want to add a runtime dependency to one specific run:
 ```gradle
 dependencies {
     implementation 'com.example:example:1.0'
-    // Only add dependency for the client run
+    // 仅为客户端运行添加依赖项
     // highlight-next-line
     clientAdditionalRuntimeClasspath 'com.example:example:1.0'
 }
@@ -87,7 +87,7 @@ dependencies {
 
 ```gradle
 runs {
-    // Only configure dependencies for the client run
+    // 仅为客户端运行配置依赖项
     // highlight-next-line
     named('client').configure {
         dependencies {

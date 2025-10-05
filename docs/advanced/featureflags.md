@@ -1,65 +1,65 @@
-# Feature Flags
+# 功能标志
 
-Feature flags are a system that allows developers to gate a set of features behind some set of required flags, that being registered elements, gameplay mechanics, data pack entries or some other unique system to your mod.
+功能标志是一种系统，允许开发者将一组功能置于某些必需标志之后，这些标志可以是已注册的元素、游戏机制、数据包条目或模组中的其他独特系统。
 
-A common use case would be gating experimental features/elements behind a experimental flag, allowing users to easily switch them on and play around with them before they are finalized.
+一个常见的用例是将实验性功能/元素置于实验标志之后，允许用户在功能最终确定之前轻松启用并进行试用。
 
 :::tip
-You are not forced to add your own flags. If you find a vanilla flag which would fit your use case, feel free to flag your blocks/items/entities/etc. with said flag.
+您不必添加自己的标志。如果发现原版标志适合您的用例，可以随意使用该标志标记您的方块/物品/实体等。
 
-For example in `1.21.3` if you were to add to the set of Pale Oak wood blocks, you'd only want those to show up if the `WINTER_DROP` flag is enabled.
+例如，在 `1.21.3` 中，如果您要添加到苍白橡树中，您可能只希望在启用了 `WINTER_DROP` 标志时显示这些方块。
 :::
 
-## Creating a Feature Flag
+## 创建功能标志
 
-To create new Feature flags, a JSON file needs to be created and referenced in your `neoforge.mods.toml` file with the `featureFlags` entry inside of your `[[mods]]` block. The specified path must be relative to the `resources` directory:
+要创建新的功能标志，需要创建一个 JSON 文件，并在 `neoforge.mods.toml` 文件的 `[[mods]]` 块中通过 `featureFlags` 条目引用它。指定的路径必须相对于 `resources` 目录：
 
 ```toml
-# In neoforge.mods.toml:
+# 在 neoforge.mods.toml 中：
 [[mods]]
-    # The file is relative to the output directory of the resources, or the root path inside the jar when compiled
-    # The 'resources' directory represents the root output directory of the resources
+    # 文件相对于资源输出目录，或者在编译时 jar 内的根路径
+    # 'resources' 目录表示资源的根输出目录
     featureFlags="META-INF/feature_flags.json"
 ```
 
-The definition of the entry consists of a list of Feature flag names, which will be loaded and registered during game initialization.
+条目的定义包括功能标志名称的列表，这些标志将在游戏初始化期间加载并注册。
 
 ```json5
 {
     "flags": [
-        // Identifier of a Feature flag to be registered
+        // 要注册的功能标志的标识符
         "examplemod:experimental"
     ]
 }
 ```
 
-## Retrieving the Feature Flag
+## 检索功能标志
 
-The registered Feature flag can be retrieved via `FeatureFlagRegistry.getFlag(ResourceLocation)`. This can be done at any time during your mod's initialization and is recommended to be stored somewhere for future use, rather than looking up the registry each time you require your flag.
+已注册的功能标志可以通过 `FeatureFlagRegistry.getFlag(ResourceLocation)` 检索。这可以在模组初始化期间的任何时间完成，建议将其存储在某处以供将来使用，而不是每次需要标志时都查找注册表。
 
 ```java
-// Look up the 'examplemod:experimental' Feature flag
+// 查找 'examplemod:experimental' 功能标志
 public static final FeatureFlag EXPERIMENTAL = FeatureFlags.REGISTRY.getFlag(ResourceLocation.fromNamespaceAndPath("examplemod", "experimental"));
 ```
 
-## Feature Elements
+## 功能元素
 
-`FeatureElement`s are registry values which can be given a set of required flags. These values are only made available to players when the respective required flags match the flags enabled in the level.
+`FeatureElement` 是可以分配一组必需标志的注册表值。这些值仅在相应的必需标志与关卡中启用的标志匹配时才对玩家可用。
 
-When a feature element is disabled, it is fully hidden from the player's view, and all interactions will be skipped. Do note that these disabled elements will still exist in the registry and are merely functionally unusable.
+当功能元素被禁用时，它将完全从玩家视图中隐藏，所有交互将被跳过。但请注意，这些禁用的元素仍然存在于注册表中，只是功能上不可用。
 
-The following is a complete list of all registries which directly implement the `FeatureElement` system:
+以下是直接实现 `FeatureElement` 系统的所有注册表的完整列表：
 
-- Item
-- Block
-- EntityType
-- MenuType
-- Potion
-- MobEffect
+- 物品（Item）
+- 方块（Block）
+- 实体类型（EntityType）
+- 菜单类型（MenuType）
+- 药水（Potion）
+- 状态效果（MobEffect）
 
-### Flagging Elements
+### 标记元素
 
-In order to flag a given `FeatureElement` as requiring your Feature flag, you simply pass it and any other desired flags into the respective registration method:
+要将给定的 `FeatureElement` 标记为需要您的功能标志，只需将其和任何其他所需标志传递到相应的注册方法中：
 
 - `Item`: `Item.Properties#requiredFeatures`
 - `Block`: `BlockBehaviour.Properties#requiredFeatures`
@@ -69,80 +69,80 @@ In order to flag a given `FeatureElement` as requiring your Feature flag, you si
 - `MobEffect`: `MobEffect#requiredFeatures`
 
 ```java
-// These elements will only become available once the 'EXPERIMENTAL' flag is enabled
+// 这些元素仅在启用了 'EXPERIMENTAL' 标志后可用
 
-// Item
+// 物品
 DeferredRegister.Items ITEMS = DeferredRegister.createItems("examplemod");
 DeferredItem<Item> EXPERIMENTAL_ITEM = ITEMS.registerSimpleItem("experimental", new Item.Properties()
-    .requiredFeatures(EXPERIMENTAL) // mark as requiring the 'EXPERIMENTAL' flag
+    .requiredFeatures(EXPERIMENTAL) // 标记为需要 'EXPERIMENTAL' 标志
 );
 
-// Block
+// 方块
 DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks("examplemod");
-// Do note that BlockBehaviour.Properties#ofFullCopy and BlockBehaviour.Properties#ofLegacyCopy will copy over the required features.
-// This means that in 1.21.3, using BlockBehaviour.Properties.ofFullCopy(Blocks.PALE_OAK_WOOD) would have your block require the 'WINTER_DROP' flag.
+// 请注意，BlockBehaviour.Properties#ofFullCopy 和 BlockBehaviour.Properties#ofLegacyCopy 会复制所需的功能标志。
+// 这意味着在 1.21.3 中，使用 BlockBehaviour.Properties.ofFullCopy(Blocks.PALE_OAK_WOOD) 会使您的方块需要 'WINTER_DROP' 标志。
 DeferredBlock<Block> EXPERIMENTAL_BLOCK = BLOCKS.registerSimpleBlock("experimental", BlockBehaviour.Properties.of()
-    .requiredFeatures(EXPERIMENTAL) // mark as requiring the 'EXPERIMENTAL' flag
+    .requiredFeatures(EXPERIMENTAL) // 标记为需要 'EXPERIMENTAL' 标志
 );
 
-// BlockItems are special in that the required features are inherited from their respective Blocks.
-// The same is also true for spawn eggs and their respective EntityTypes.
+// BlockItems 特殊之处在于其所需的功能标志继承自其相应的方块。
+// 同样，生成蛋的功能标志继承自其相应的实体类型。
 DeferredItem<BlockItem> EXPERIMENTAL_BLOCK_ITEM = ITEMS.registerSimpleBlockItem(EXPERIMENTAL_BLOCK);
 
-// EntityType
+// 实体类型
 DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(Registries.ENTITY_TYPE, "examplemod");
 DeferredHolder<EntityType<?>, EntityType<ExperimentalEntity>> EXPERIMENTAL_ENTITY = ENTITY_TYPES.register("experimental", registryName -> EntityType.Builder.of(ExperimentalEntity::new, MobCategory.AMBIENT)
-    .requiredFeatures(EXPERIMENTAL) // mark as requiring the 'EXPERIMENTAL' flag
+    .requiredFeatures(EXPERIMENTAL) // 标记为需要 'EXPERIMENTAL' 标志
     .build(ResourceKey.create(Registries.ENTITY_TYPE, registryName))
 );
 
-// MenuType
+// 菜单类型
 DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(Registries.MENU, "examplemod");
 DeferredHolder<MenuType<?>, MenuType<ExperimentalMenu>> EXPERIMENTAL_MENU = MENU_TYPES.register("experimental", () -> new MenuType<>(
-    // Using vanilla's MenuSupplier:
-    // This is used when your menu is not encoding complex data during `player.openMenu`. Example:
+    // 使用原版的 MenuSupplier:
+    // 当您的菜单在 `player.openMenu` 期间未编码复杂数据时使用。例如：
     // (windowId, inventory) -> new ExperimentalMenu(windowId, inventory),
 
-    // Using NeoForge's IContainerFactory:
-    // This is used when you wish to read complex data encoded during `player.openMenu`.
-    // Casting is important here, as `MenuType` specifically expects a `MenuSupplier`.
+    // 使用 NeoForge 的 IContainerFactory:
+    // 当您希望读取 `player.openMenu` 期间编码的复杂数据时使用。
+    // 这里的强制转换很重要，因为 `MenuType` 特别需要一个 `MenuSupplier`。
     (IContainerFactory<ExperimentalMenu>) (windowId, inventory, buffer) -> new ExperimentalMenu(windowId, inventory, buffer),
     
-    FeatureFlagSet.of(EXPERIMENTAL) // mark as requiring the 'EXPERIMENTAL' flag
+    FeatureFlagSet.of(EXPERIMENTAL) // 标记为需要 'EXPERIMENTAL' 标志
 ));
 
-// MobEffect
+// 状态效果
 DeferredRegister<MobEffect> MOB_EFFECTS = DeferredRegister.create(Registries.MOB_EFFECT, "examplemod");
 DeferredHolder<MobEffect, ExperimentalMobEffect> EXPERIMENTAL_MOB_EEFECT = MOB_EFFECTS.register("experimental", registryName -> new ExperimentalMobEffect(MobEffectCategory.NEUTRAL, CommonColors.WHITE)
-    .requiredFeatures(EXPERIMENTAL) // mark as requiring the 'EXPERIMENTAL' flag
+    .requiredFeatures(EXPERIMENTAL) // 标记为需要 'EXPERIMENTAL' 标志
 );
 
-// Potion
+// 药水
 DeferredRegister<Potion> POTIONS = DeferredRegister.create(Registries.POTION, "examplemod");
 DeferredHolder<Potion, ExperimentalPotion> EXPERIMENTAL_POTION = POTIONS.register("experimental", registryName -> new ExperimentalPotion(registryName.toString(), new MobEffectInstance(EXPERIMENTAL_MOB_EEFECT))
-    .requiredFeatures(EXPERIMENTAL) // mark as requiring the 'EXPERIMENTAL' flag
+    .requiredFeatures(EXPERIMENTAL) // 标记为需要 'EXPERIMENTAL' 标志
 );
 ```
 
-### Validating Enabled Status
+### 验证启用状态
 
-In order to validate if features should be enabled or not, you must first acquire the set of enabled features. This can be done in a variety of ways, but the common and recommended method is `LevelReader#enabledFeatures`.  
+要验证功能是否应启用，您必须首先获取启用的功能集。这可以通过多种方式完成，但常见且推荐的方法是使用 `LevelReader#enabledFeatures`。
 
 ```java
-level.enabledFeatures(); // from a 'LevelReader' instance
-entity.level().enabledFeatures(); // from a 'Entity' instance
+level.enabledFeatures(); // 从 'LevelReader' 实例
+entity.level().enabledFeatures(); // 从 'Entity' 实例
 
-// Client Side
+// 客户端
 minecraft.getConnection().enabledFeatures();
 
-// Server Side
+// 服务端
 server.getWorldData().enabledFeatures();
 ```
 
-To validate if any `FeatureFlagSet` is enabled, you can pass the enabled features to `FeatureFlagSet#isSubsetOf`, and for validating if a specific `FeatureElement` is enabled, you can invoke `FeatureElement#isEnabled`.
+要验证任何 `FeatureFlagSet` 是否启用，可以将启用的功能传递给 `FeatureFlagSet#isSubsetOf`，要验证特定 `FeatureElement` 是否启用，可以调用 `FeatureElement#isEnabled`。
 
 :::note
-`ItemStack` has a special `isItemEnabled(FeatureFlagSet)` method. This is so that empty stacks are treated as enabled even if the required features for the backing `Item` do not match the enabled features. It is recommended to prefer this method over `Item#isEnabled` where possible.
+`ItemStack` 有一个特殊的 `isItemEnabled(FeatureFlagSet)` 方法。这是为了确保即使支持的 `Item` 的所需功能与启用的功能不匹配，空堆栈也被视为启用。建议在可能的情况下优先使用此方法而不是 `Item#isEnabled`。
 :::
 
 ```java
@@ -151,22 +151,22 @@ featureElement.isEnabled(enabledFeatures);
 itemStack.isItemEnabled(enabledFeatures);
 ```
 
-## Feature Packs
+## 功能包
 
-_See also: [Resource Packs](../resources/index.md#assets), [Data Packs](../resources/index.md#data) and [Pack.mcmeta](../resources/index.md#packmcmeta)_
+_另见：[资源包](../resources/index.md#assets)、[数据包](../resources/index.md#data) 和 [Pack.mcmeta](../resources/index.md#packmcmeta)_
 
-Feature packs are a type of pack that not only loads resources and/or data, but also has the ability to toggle on a given set of feature flags. These flags are defined in the `pack.mcmeta` JSON file at the root of this pack, which follows the below format:
+功能包是一种不仅加载资源和/或数据，还能够切换给定功能标志的包。这些标志在此包根目录下的 `pack.mcmeta` JSON 文件中定义，格式如下：
 
 :::note
-This file differs from the one in your mod's `resources/` directory. This file defines a brand new feature pack and thus must be in its own folder.
+此文件不同于模组 `resources/` 目录中的文件。此文件定义了一个全新的功能包，因此必须位于其自己的文件夹中。
 :::
 
 ```json5
 {
     "features": {
         "enabled": [
-            // Identifier of a Feature flag to be enabled
-            // Must be a valid registered flag
+            // 要启用的功能标志的标识符
+            // 必须是有效的已注册标志
             "examplemod:experimental"
         ]
     },
@@ -174,114 +174,114 @@ This file differs from the one in your mod's `resources/` directory. This file d
 }
 ```
 
-There are a couple of ways for users to obtain a feature pack, namely installing them from an external source as a datapack, or downloading a mod that has a built-in feature pack. Both of these then need to be installed differently depending on the [physical side](../concepts/sides.md).
+用户可以通过以下几种方式获取功能包：从外部来源安装为数据包，或下载包含内置功能包的模组。这两种方式的安装方式取决于[物理端](../concepts/sides.md)。
 
-### Built-In
+### 内置功能包
 
-Built-in packs are bundled with your mod and are made available to the game using the `AddPackFindersEvent` event.
+内置包与您的模组捆绑在一起，并通过 `AddPackFindersEvent` 事件提供给游戏。
 
 ```java
-@SubscribeEvent // on the mod event bus
+@SubscribeEvent // 在模组事件总线上
 public static void addFeaturePacks(final AddPackFindersEvent event) {
     event.addPackFinders(
-            // Path relative to your mods 'resources' pointing towards this pack
-            // Take note this also defines your packs id using the following format
-            // mod/<namespace>:<path>`, e.g. `mod/examplemod:data/examplemod/datapacks/experimental`
+            // 相对于模组 'resources' 的路径，指向此包
+            // 请注意，这还定义了包的 ID，格式为
+            // mod/<namespace>:<path>`，例如 `mod/examplemod:data/examplemod/datapacks/experimental`
             ResourceLocation.fromNamespaceAndPath("examplemod", "data/examplemod/datapacks/experimental"),
             
-            // What kind of resources are contained within this pack
-            // 'CLIENT_RESOURCES' for packs with client assets (resource packs)
-            // 'SERVER_DATA' for packs with server data (data packs)
+            // 此包中包含的资源类型
+            // 'CLIENT_RESOURCES' 表示包含客户端资源（资源包）
+            // 'SERVER_DATA' 表示包含服务端数据（数据包）
             PackType.SERVER_DATA,
             
-            // Display name shown in the Experiments screen
+            // 在实验屏幕中显示的名称
             Component.literal("ExampleMod: Experiments"),
             
-            // In order for this pack to load and enable feature flags, this MUST be 'FEATURE',
-            // any other PackSource type is invalid here
+            // 为了使此包加载并启用功能标志，此处必须为 'FEATURE'，
+            // 其他任何 PackSource 类型均无效
             PackSource.FEATURE,
             
-            // If this is true, the pack is always active and cannot be disabled, should always be false for feature packs
+            // 如果为 true，则包始终处于活动状态且无法禁用，对于功能包应始终为 false
             false,
             
-            // Priority to load resources from this pack in
-            // 'TOP' this pack will be prioritized over other packs
-            // 'BOTTOM' other packs will be prioritized over this pack 
+            // 加载此包资源的优先级
+            // 'TOP' 表示此包优先于其他包
+            // 'BOTTOM' 表示其他包优先于此包
             Pack.Position.TOP
     );
 }
 ```
 
-#### Enabling in Singleplayer
+#### 在单人模式中启用
 
-1. Create a new world.
-2. Navigate to the Experiments screen.
-3. Toggle on the desired packs.
-4. Confirm changes by clicking `Done`.
+1. 创建一个新世界。
+2. 导航到实验屏幕。
+3. 切换所需的包。
+4. 点击 `完成` 确认更改。
 
-#### Enabling in Multiplayer
+#### 在多人模式中启用
 
-1. Open your server's `server.properties` file.
-2. Add the feature pack id to `initial-enabled-packs`, separating each pack by a `,`. The pack id is defined during registering your pack finder, as seen above.
+1. 打开服务器的 `server.properties` 文件。
+2. 将功能包 ID 添加到 `initial-enabled-packs`，每个包用 `,` 分隔。包 ID 在注册包查找器时定义，如上所示。
 
-### External
+### 外部功能包
 
-External packs are provided to your users in datapack form.
+外部包以数据包形式提供给用户。
 
-#### Installation in Singleplayer
+#### 在单人模式中安装
 
-1. Create a new world.
-2. Navigate to the datapack selection screen.
-3. Drag and drop the datapack zip file onto the game window.
-4. Move the newly available datapack over to the `Selected` packs list.
-5. Confirm changes by clicking `Done`.
+1. 创建一个新世界。
+2. 导航到数据包选择屏幕。
+3. 将数据包 zip 文件拖放到游戏窗口。
+4. 将新可用的数据包移动到 `已选择` 包列表。
+5. 点击 `完成` 确认更改。
 
-The game will now warn you about any newly selected experimental features, potential bugs, issues and crashes. You can confirm these changes by clicking `Proceed` or `Details` to see an extensive list of all selected packs and which features they would enable.
+游戏现在会警告您有关任何新选择的实验功能、潜在的错误、问题和崩溃。您可以通过点击 `继续` 确认这些更改，或点击 `详细信息` 查看所有选择的包及其启用的功能的详细列表。
 
 :::note
-External feature packs do not show up in the Experiments screen. The Experiments screen will only show built-in feature packs.
+外部功能包不会显示在实验屏幕中。实验屏幕仅显示内置功能包。
 
-To disable external feature packs after enabling them, navigate back into the datapacks screen and move the external packs back into `Available` from `Selected`.
+要禁用已启用的外部功能包，请重新进入数据包屏幕，并将外部包从 `已选择` 移回 `可用`。
 :::
 
-#### Installation in Multiplayer
+#### 在多人模式中安装
 
-Enabling Feature Packs can only be done during initial world creation, and they cannot be disabled once enabled.
+启用功能包只能在初始世界创建期间完成，启用后无法禁用。
 
-1. Create the directory `./world/datapacks`
-2. Upload the datapack zip file into the newly created directory
-3. Open your server's `server.properties` file
-4. Add the datapack zip file name (excluding `.zip`) to `initial-enabled-packs` (separating each pack by a `,`)
-   - Example: The zip `examplemod-experimental.zip` would be added like so `initial-enabled-packs=vanilla,examplemod-experimental`
+1. 创建目录 `./world/datapacks`
+2. 将数据包 zip 文件上传到新创建的目录
+3. 打开服务器的 `server.properties` 文件
+4. 将数据包 zip 文件名（不包括 `.zip`）添加到 `initial-enabled-packs`（每个包用 `,` 分隔）
+   - 示例：zip 文件 `examplemod-experimental.zip` 应添加为 `initial-enabled-packs=vanilla,examplemod-experimental`
 
-### Data Generation
+### 数据生成
 
-_See also: [Datagen](../resources/index.md#data-generation)_
+_另见：[数据生成](../resources/index.md#data-generation)_
 
-Feature packs can be generated during regular mod datagen. This is best used in combination with built-in packs, but it is also possible to zip up the generated result and share it as an external pack. Just choose one, i.e. don't provide it as an external pack and also bundle it as a built-in pack.
+功能包可以在常规模组数据生成期间生成。这最好与内置包结合使用，但也可以将生成的结果打包为外部包并共享。只需选择一种方式，例如不要同时将其作为外部包提供并捆绑为内置包。
 
 ```java
-@SubscribeEvent // on the mod event bus
+@SubscribeEvent // 在模组事件总线上
 public static void gatherData(final GatherDataEvent.Client event) {
     DataGenerator generator = event.getGenerator();
     
-    // To generate a feature pack, you must first obtain a pack generator instance for the desired pack.
+    // 要生成功能包，您必须首先为所需包获取一个包生成器实例。
     // generator.getBuiltinDatapack(<shouldGenerate>, <namespace>, <path>);
-    // This will generate the feature pack into the following path:
+    // 这将在以下路径中生成功能包：
     // ./data/<namespace>/datapacks/<path>
     PackGenerator featurePack = generator.getBuiltinDatapack(true, "examplemod", "experimental");
         
-    // Register a provider to generate the `pack.mcmeta` file.
+    // 注册一个提供者以生成 `pack.mcmeta` 文件。
     featurePack.addProvider(output -> PackMetadataGenerator.forFeaturePack(
             output,
             
-            // Description displayed in the Experiments screen
+            // 在实验屏幕中显示的描述
             Component.literal("Enabled experimental features for ExampleMod"),
             
-            // Set of Feature flags this pack should enable
+            // 此包应启用的功能标志集
             FeatureFlagSet.of(EXPERIMENTAL)
     ));
     
-    // Register additional providers (recipes, loot tables) to `featurePack` to write any generated resources into this pack, rather than the root pack.
+    // 将其他提供者（配方、战利品表）注册到 `featurePack`，以将任何生成的资源写入此包，而不是根包。
 }
 ```

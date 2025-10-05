@@ -5,162 +5,162 @@ sidebar_position: 4
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Troubleshooting & FAQ
+# 故障排除与常见问题解答
 
-This page lists some common problems when installing or running NeoForge modpacks. If your problem isn't covered here, please see the [Getting Support][support] section.
+本页面列出了一些安装或运行 NeoForge 整合包时的常见问题。如果您的问题未在此处列出，请参阅[获取支持][support]部分。
 
-## Installing Java or NeoForge
+## 安装 Java 或 NeoForge
 
-### I downloaded the installer file, but I have no way of running it!
+### 我下载了安装程序文件，但无法运行它！
 
-Please see the [Installing Java][installjava] section. Yes, even if you already have Minecraft: Java Edition installed.
+请参阅[安装 Java][installjava]部分。是的，即使您已经安装了 Minecraft: Java Edition。
 
-### I installed Java, but I'm still getting the wrong version!
+### 我安装了 Java，但仍然显示版本错误！
 
-This likely means that your PATH variable is not set, or set incorrectly. The PATH variable is a system variable that tells your computer where to find Java. To fix it, do the following depending on your operating system:
+这可能意味着您的 PATH 变量未设置或设置不正确。PATH 变量是一个系统变量，用于告诉计算机在哪里找到 Java。根据您的操作系统，执行以下步骤进行修复：
 
 <Tabs defaultValue="windows">
   <TabItem value="windows" label="Windows">
-Download and run the [Jarfix program][jarfix].
+下载并运行 [Jarfix 程序][jarfix]。
   </TabItem>
   <TabItem value="macos" label="MacOS">
-Open Finder. In Finder, open the Applications/Utilities folder and double-click Terminal.
+打开 Finder。在 Finder 中，打开 Applications/Utilities 文件夹并双击 Terminal。
 
-Run the following commands:
+运行以下命令：
 
 - `echo export "JAVA_HOME=\$(/usr/libexec/java_home)" >> ~/.zshenv`
 - `echo export "PATH=$PATH:$JAVA_HOME/bin" >> ~/.zshenv`
 
-Then, close Terminal and try again.
+然后，关闭 Terminal 并重试。
   </TabItem>
   <TabItem value="linux" label="Linux">
-Many common Linux distributions have dedicated programs for managing the PATH variable. See their respective Java installation instructions:
+许多常见的 Linux 发行版都有专门的程序来管理 PATH 变量。请参阅它们各自的 Java 安装说明：
 
 <ul>
-  <li>[Installing Java on Arch][arch]</li>
-  <li>[Installing Java on Debian][debian]</li>
-  <li>[Installing Java on Fedora][fedora]</li>
-  <li>[Installing Java on Ubuntu][ubuntu]</li>
+  <li>[在 Arch 上安装 Java][arch]</li>
+  <li>[在 Debian 上安装 Java][debian]</li>
+  <li>[在 Fedora 上安装 Java][fedora]</li>
+  <li>[在 Ubuntu 上安装 Java][ubuntu]</li>
 </ul>
 
-If you use a different distribution, you need to either look up the method for your specific distribution, or set the PATH variable manually through the console.
+如果您使用的是其他发行版，您需要查找适用于您特定发行版的方法，或者通过控制台手动设置 PATH 变量。
 
-To do so, open the terminal for your Linux distribution. Common names would be `GNOME Terminal` or `Konsole`, however it may vary depending on your exact setup.
+为此，打开您的 Linux 发行版的终端。常见名称可能是 `GNOME Terminal` 或 `Konsole`，但可能因具体设置而异。
 
-Find the location where Java is stored. Often, this will be something like `/usr/lib/jvm/java-21-openjdk-amd64`.
+找到 Java 的存储位置。通常，这可能是 `/usr/lib/jvm/java-21-openjdk-amd64`。
 
-Run the following commands:
+运行以下命令：
 
-- `echo export "JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64/" >> ~/.bashrc` (swapping out the path for the actual path if needed)
+- `echo export "JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64/" >> ~/.bashrc`（如果需要，请替换为实际路径）
 - `echo export "PATH=$PATH:$JAVA_HOME/bin" >> ~/.bashrc`
 
-Then, close the terminal and try again.
+然后，关闭终端并重试。
   </TabItem>
 </Tabs>
 
-### I am getting an error saying "Could not find or load main class @user_jvm_args.txt", what do I do?
+### 我收到错误提示“无法找到或加载主类 @user_jvm_args.txt”，该怎么办？
 
-There are two common reasons for this:
+这通常有两个原因：
 
-- You are running an outdated version of Java. Please see the [Installing Java][installjava] section.
-- You have multiple versions of Java installed on your computer, possibly installed one of them just right now, but your computer is still using the old one. This means that your PATH variable is not set correctly. Please follow the steps outlined [here][wrongjava].
+- 您正在运行过时版本的 Java。请参阅[安装 Java][installjava]部分。
+- 您的计算机上安装了多个 Java 版本，可能刚刚安装了一个新版本，但计算机仍在使用旧版本。这意味着您的 PATH 变量未正确设置。请按照[此处][wrongjava]的步骤操作。
 
-## Playing NeoForge
+## 使用 NeoForge
 
 <!--
 This subsection is used as the target for links.neoforged.net/early-display-errors. Avoid changing the title, or update the short link target as well if necessary.
 -->
-### Early Display Errors
+### 启动时的显示错误
 
-If you are reading this, you were most likely redirected here by an error message that appeared early during startup. The reason for that is that something went wrong when trying to build the "early loading progress" window, which commonly means that something is wrong with your system's graphics settings.
+如果您正在阅读此内容，您很可能是被启动早期出现的错误消息重定向到此处的。这通常意味着系统的图形设置存在问题。
 
-- Refer to [Minecraft's own video and graphics issues FAQ][mcdriver] and go through the steps outlined there.
-- If that doesn't help, try updating your graphics drivers. See [I am having visual issues!][visual] below.
-- If that too doesn't help, [come talk to us on the Discord server][support] because something is very clearly wrong. As a workaround, however:
-    - Open your instance folder. If you use a [third-party launcher][launcher], they will usually provide a button labelled something like "Open Instance Folder". If you are using the vanilla launcher, use the folder you set in the [modded profile][clientinstall].
-    - Navigate into the `config` folder.
-    - Open the `fml.toml` file with your favorite text editor (e.g. Windows Notepad).
-    - Change the line `earlyWindowControl=true` to `earlyWindowControl=false`.
-    - Save the changed file.
-    - Try starting the game again.
+- 请参考 [Minecraft 的视频和图形问题 FAQ][mcdriver] 并按照其中的步骤操作。
+- 如果仍然无效，请尝试更新图形驱动程序。请参阅[我遇到了视觉问题！][visual]。
+- 如果仍然无效，请[加入我们的 Discord 服务器][support]与我们联系，因为很明显有问题。作为一种解决方法：
+    - 打开您的实例文件夹。如果您使用的是[第三方启动器][launcher]，它们通常会提供一个类似于“打开实例文件夹”的按钮。如果您使用的是原版启动器，请使用[模组配置文件][clientinstall]中设置的文件夹。
+    - 进入 `config` 文件夹。
+    - 使用您喜欢的文本编辑器（例如 Windows 记事本）打开 `fml.toml` 文件。
+    - 将 `earlyWindowControl=true` 行更改为 `earlyWindowControl=false`。
+    - 保存更改后的文件。
+    - 再次尝试启动游戏。
 
-### My game is lagging! What can I do?
+### 我的游戏很卡！我该怎么办？
 
-Identify whether the problem is on the server or the client (or both).
+确定问题是出在服务器端还是客户端（或两者）。
 
-- If your game is running at low FPS (frames per second), please read [My client is lagging! What can I do?][clientlag]
-- If your game is running at decent enough FPS, but your world is lagging (machines running too slowly, mobs lagging behind visually, etc.), please read [My server is lagging! What can I do?][serverlag]
+- 如果您的游戏运行帧率（FPS）较低，请阅读[我的客户端很卡！我该怎么办？][clientlag]。
+- 如果您的游戏帧率尚可，但世界运行缓慢（例如机器运行过慢、实体视觉延迟等），请阅读[我的服务器很卡！我该怎么办？][serverlag]。
 
-### My server is lagging! What can I do?
+### 我的服务器很卡！我该怎么办？
 
-There is multiple reasons why this could be. A common offender are too many entities (= mobs or dropped items) or block entities (= chests, machines, etc.) being nearby.
+这可能有多种原因。常见问题是附近有太多实体（例如生物或掉落物）或方块实体（例如箱子、机器等）。
 
-If you want an exact breakdown of what is lagging, try using the [Spark][spark] mod. Spark is a profiler that can tell you what code paths are taking how long. To use it:
+如果您想确切了解是什么导致了卡顿，可以尝试使用 [Spark][spark] 模组。Spark 是一个性能分析工具，可以告诉您哪些代码路径耗时较长。使用方法如下：
 
-- Join a world.
-- Run the `/spark profiler` command.
-- Wait a couple of minutes.
-- Run the `/spark profiler --stop` command.
-- Open the link and have a look or, if you can't make any sense of it, post it in the [Discord server][support]'s `#user-support` channel and we will try our best to help you.
+- 加入一个世界。
+- 运行 `/spark profiler` 命令。
+- 等待几分钟。
+- 运行 `/spark profiler --stop` 命令。
+- 打开链接查看分析结果。如果您无法理解，可以将其发布到 [Discord 服务器][support] 的 `#user-support` 频道，我们会尽力帮助您。
 
-### My client is lagging! What can I do?
+### 我的客户端很卡！我该怎么办？
 
-This is commonly because Minecraft is not a very optimized game, and mods can make this worse.
+这通常是因为 Minecraft 本身优化较差，而模组可能会加剧这一问题。
 
-If you are running shaders, chances are that your graphics card is not strong enough to support them. Try disabling shaders and see if this resolves the issue.
+如果您正在运行光影，可能是您的显卡性能不足以支持它们。尝试禁用光影，看看是否能解决问题。
 
-If you want an exact breakdown of what is lagging, try using the [Spark][spark] mod. Spark is a profiler that can tell you what code paths are taking how long. To use it:
+如果您想确切了解是什么导致了卡顿，可以尝试使用 [Spark][spark] 模组。Spark 是一个性能分析工具，可以告诉您哪些代码路径耗时较长。使用方法如下：
 
-- Join a world.
-- Run the `/sparkc profiler` command. (Note the use of `/sparkc`, as opposed to `/spark` to profile the server.)
-- Wait a couple of minutes.
-- Run the `/sparkc profiler --stop` command.
-- Open the link and have a look or, if you can't make any sense of it, post it in the [Discord server][support]'s `#user-support` channel and we will try our best to help you.
+- 加入一个世界。
+- 运行 `/sparkc profiler` 命令。（注意使用 `/sparkc` 而不是 `/spark` 来分析客户端性能。）
+- 等待几分钟。
+- 运行 `/sparkc profiler --stop` 命令。
+- 打开链接查看分析结果。如果您无法理解，可以将其发布到 [Discord 服务器][support] 的 `#user-support` 频道，我们会尽力帮助您。
 
-### How do I find a faulty mod?
+### 如何找到有问题的模组？
 
-If you need to find a faulty mod without any lead on where to start, your best bet may be to use a binary search. The binary search is a common way to find a faulty things among many, without going through things one by one. Reworded for mods, it goes as follows:
+如果您需要在没有任何线索的情况下找到有问题的模组，最好的方法可能是使用二分搜索。二分搜索是一种常见的方法，可以在许多事物中找到问题，而无需逐一检查。对于模组，操作如下：
 
-1. Remove half of the existing mods and put them into a different folder.
-    - Make sure that dependencies (mods requiring other mods) remain intact.
-2. Run the game.
-3. Find out if the issue still exists.
-    - If yes: Repeat from step 1 with the current mods in place.
-    - If no: Swap out the most recently added mods with the ones most recently set aside, and repeat from step 1.
-4. Repeat this until you found the problematic mod(s).
+1. 移除一半的模组并将它们放入另一个文件夹。
+    - 确保依赖关系（需要其他模组的模组）保持完整。
+2. 运行游戏。
+3. 确定问题是否仍然存在。
+    - 如果是：从步骤 1 开始，使用当前的模组继续。
+    - 如果否：将最近移除的模组与当前模组交换，然后从步骤 1 开始。
+4. 重复此过程，直到找到有问题的模组。
 
-### I am having visual issues!
+### 我遇到了视觉问题！
 
-Visual issues are often caused by outdated graphics drivers. Please update your graphics drivers, depending on your graphics card brand: [AMD][amd] | [Intel][intel] | [NVIDIA][nvidia]
+视觉问题通常是由过时的图形驱动程序引起的。请根据您的显卡品牌更新图形驱动程序：[AMD][amd] | [Intel][intel] | [NVIDIA][nvidia]
 
-If your issue still persists after updating your graphics drivers, see [Getting Support][support].
+如果更新图形驱动程序后问题仍然存在，请参阅[获取支持][support]。
 
-## Getting Support
+## 获取支持
 
-If your problem isn't covered here, you should feel free to join the [Discord server][discord] and ask for help in the `#user-support` channel. When doing so, please provide the following info if you can:
+如果您的问题未在此处列出，请随时加入 [Discord 服务器][discord] 并在 `#user-support` 频道中寻求帮助。在寻求帮助时，请尽可能提供以下信息：
 
-- A log (special kind of text file).
-    - If you have an issue during installation, the log is found in the same location as the installer itself, with `.jar` (or `.log` if you have file extensions enabled) appended to its name.
-    - If you have an issue during gameplay, the logs are found in your instance folder. Go into the `logs` folder and use the file called `debug`, or `debug.log` if you have file extensions enabled.
-- A [Spark report][sparkreport], in the event that you made one.
+- 日志文件（特殊类型的文本文件）。
+    - 如果是安装问题，日志文件位于安装程序所在位置，文件名后缀为 `.jar`（如果启用了文件扩展名，则为 `.log`）。
+    - 如果是游戏问题，日志文件位于实例文件夹中的 `logs` 文件夹，文件名为 `debug` 或 `debug.log`（如果启用了文件扩展名）。
+- 如果您生成了 [Spark 报告][sparkreport]，请一并提供。
 
-### There is no `debug.log`!
+### 没有 `debug.log` 文件！
 
-If you are using the [CurseForge app][curseforge] to play, it is possible that the app disabled the `debug.log` file being created. If that is the case, you need to re-enable it. To do so:
+如果您使用 [CurseForge 应用][curseforge] 游戏，可能是应用禁用了 `debug.log` 文件的生成。在这种情况下，您需要重新启用它。操作如下：
 
-- Open the Settings (gear icon at the bottom left).
-- Under Game-Specific Settings, navigate to Minecraft.
-- Under Advanced, toggle on the "Enable Forge debug.log" option.
+- 打开设置（左下角齿轮图标）。
+- 在游戏特定设置中，导航到 Minecraft。
+- 在高级设置下，启用“启用 Forge debug.log”选项。
 
-Then, re-launch the game to provide a fresh `debug.log`.
+然后，重新启动游戏以生成新的 `debug.log`。
 
-If you are not using CurseForge, or if you are using CurseForge and have enabled the logging option but there's still no `debug.log`, it is possible that the game crashes before a `debug.log` can even be created. In this case, a launcher log can help us instead.
+如果您未使用 CurseForge，或者即使启用了日志选项仍然没有 `debug.log`，可能是游戏在生成 `debug.log` 之前就崩溃了。在这种情况下，启动器日志可以帮助我们。
 
-To get a launcher log, open your [`.minecraft`][dotminecraft] folder and find the `launcher_log` file (or `launcher_log.txt` if you have file extensions enabled).
+要获取启动器日志，请打开您的 [`.minecraft`][dotminecraft] 文件夹，找到 `launcher_log` 文件（如果启用了文件扩展名，则为 `launcher_log.txt`）。
 
-### Where is my .minecraft folder?
+### 我的 .minecraft 文件夹在哪里？
 
-Depending on your operating system, the `.minecraft` folder can be found at the following location:
+根据您的操作系统，`.minecraft` 文件夹位于以下位置：
 
 <Tabs defaultValue="windows">
   <TabItem value="windows" label="Windows">
@@ -174,7 +174,7 @@ Depending on your operating system, the `.minecraft` folder can be found at the 
   </TabItem>
 </Tabs>
 
-[amd]: https://www.amd.com/en/support
+[amd]: https://www.amd.com/zh-cn/support
 [arch]: https://wiki.archlinux.org/title/Java
 [clientinstall]: client.md#installing
 [clientlag]: #my-client-is-lagging-what-can-i-do
@@ -182,13 +182,13 @@ Depending on your operating system, the `.minecraft` folder can be found at the 
 [debian]: https://wiki.debian.org/Java
 [discord]: https://discord.neoforged.net/
 [dotminecraft]: #where-is-my-minecraft-folder
-[fedora]: https://docs.fedoraproject.org/en-US/quick-docs/installing-java
-[intel]: https://www.intel.com/content/www/us/en/support/detect.html
+[fedora]: https://docs.fedoraproject.org/zh_Hans/quick-docs/installing-java
+[intel]: https://www.intel.cn/content/www/cn/zh/support/detect.html
 [installjava]: index.md#installing-java
 [jarfix]: https://johann.loefflmann.net/en/software/jarfix/index.html
 [launcher]: launchers.md
 [mcdriver]: https://aka.ms/mcdriver
-[nvidia]: https://www.nvidia.com/download/index.aspx
+[nvidia]: https://www.nvidia.cn/drivers/lookup/
 [serverlag]: #my-server-is-lagging-what-can-i-do
 [spark]: https://www.curseforge.com/minecraft/mc-mods/spark
 [sparkreport]: #my-game-is-lagging-what-can-i-do

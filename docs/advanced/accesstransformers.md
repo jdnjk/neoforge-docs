@@ -1,28 +1,28 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Access Transformers
+# 访问转换器
 
-Access Transformers (ATs for short) allow for widening the visibility and modifying the `final` flags of classes, methods, and fields. They allow modders to access and modify otherwise inaccessible members in classes outside their control.
+访问转换器（简称 ATs）允许扩展类、方法和字段的可见性，并修改其 `final` 标志。它们使模组开发者能够访问和修改原本无法访问的类成员。
 
-The [specification document][specs] can be viewed on the NeoForged GitHub.
+可以在 NeoForged 的 GitHub 上查看[规范文档][specs]。
 
-## Adding ATs
+## 添加访问转换器
 
-Adding an Access Transformer to your mod project is as simple as adding a single line into your `build.gradle`:
+向模组项目添加访问转换器非常简单，只需在 `build.gradle` 中添加一行代码：
 
-Access Transformers need to be declared in `build.gradle`. AT files can be specified anywhere as long as they are copied to the `resources` output directory on compilation.
+访问转换器需要在 `build.gradle` 中声明。AT 文件可以放置在任何位置，只要在编译时将它们复制到 `resources` 输出目录即可。
 
 <Tabs defaultValue="mdg">
 <TabItem value="mdg" label="ModDevGradle">
 
-No need to do anything here by default!
+默认情况下无需执行任何操作！
 
 </TabItem>
 <TabItem value="ng" label="NeoGradle">
 
 ```gradle
-// In build.gradle:
+// 在 build.gradle 中：
 minecraft {
     accessTransformers {
         file 'src/main/resources/META-INF/accesstransformer.cfg'
@@ -33,25 +33,25 @@ minecraft {
 </TabItem>
 </Tabs>
 
-By default, NeoForge will search for `META-INF/accesstransformer.cfg`. If the `build.gradle` specifies access transformers in any other location, then their location needs to be defined within `neoforge.mods.toml`:
+默认情况下，NeoForge 会搜索 `META-INF/accesstransformer.cfg`。如果 `build.gradle` 中指定了其他位置的访问转换器，则需要在 `neoforge.mods.toml` 中定义它们的位置：
 
 ```toml
-# In neoforge.mods.toml:
+# 在 neoforge.mods.toml 中：
 [[accessTransformers]]
-## The file is relative to the output directory of the resources, or the root path inside the jar when compiled
-## The 'resources' directory represents the root output directory of the resources
+## 文件相对于资源输出目录，或者在编译时 jar 内的根路径
+## 'resources' 目录表示资源的根输出目录
 file="META-INF/accesstransformer.cfg"
 ```
 
-Additionally, multiple AT files can be specified and will be applied in order. This can be useful for larger mods with multiple packages.
+此外，可以指定多个 AT 文件，并按顺序应用。这对于具有多个包的大型模组非常有用。
 
 <Tabs defaultValue="mdg">
 <TabItem value="mdg" label="ModDevGradle">
 
 ```gradle
-// In build.gradle:
+// 在 build.gradle 中：
 neoForge {
-    // ModDevGradle already tries to include 'src/main/resources/META-INF/accesstransformer.cfg' by default
+    // ModDevGradle 默认会尝试包含 'src/main/resources/META-INF/accesstransformer.cfg'
     accessTransformers.from 'src/additions/resources/accesstransformer_additions.cfg'
 }
 ```
@@ -60,7 +60,7 @@ neoForge {
 <TabItem value="ng" label="NeoGradle">
 
 ```gradle
-// In build.gradle:
+// 在 build.gradle 中：
 minecraft {
     accessTransformers {
         file 'src/main/resources/META-INF/accesstransformer.cfg'
@@ -73,7 +73,7 @@ minecraft {
 </Tabs>
 
 ```toml
-# In neoforge.mods.toml
+# 在 neoforge.mods.toml 中
 [[accessTransformers]]
 file="accesstransformer_main.cfg"
 
@@ -81,95 +81,95 @@ file="accesstransformer_main.cfg"
 file="accesstransformer_additions.cfg"
 ```
 
-After adding or modifying any Access Transformer, the Gradle project must be refreshed for the transformations to take effect.
+添加或修改任何访问转换器后，必须刷新 Gradle 项目以使转换生效。
 
-## The Access Transformer Specification
+## 访问转换器规范
 
-### Comments
+### 注释
 
-All text after a `#` until the end of the line will be treated as a comment and will not be parsed.
+所有以 `#` 开头的文本直到行尾都会被视为注释，不会被解析。
 
-### Access Modifiers
+### 访问修饰符
 
-Access modifiers specify to what new member visibility the given target will be transformed to. In decreasing order of visibility:
+访问修饰符指定目标成员的新可见性。按可见性从高到低排序：
 
-- `public` - visible to all classes inside and outside its package
-- `protected` - visible only to classes inside the package and subclasses
-- `default` - visible only to classes inside the package
-- `private` - visible only to inside the class
+- `public` - 对包内外的所有类可见
+- `protected` - 仅对包内类和子类可见
+- `default` - 仅对包内类可见
+- `private` - 仅对类内部可见
 
-A special modifier `+f` and `-f` can be appended to the aforementioned modifiers to either add or remove respectively the `final` modifier, which prevents subclassing, method overriding, or field modification when applied.
+可以在上述修饰符后附加特殊修饰符 `+f` 和 `-f`，分别添加或移除 `final` 修饰符。`final` 修饰符会阻止子类化、方法重写或字段修改。
 
 :::danger
-Directives only modify the method they directly reference; any overriding methods will not be access-transformed. It is advised to ensure transformed methods do not have non-transformed overrides that restrict the visibility, which will result in the JVM throwing an error.
+指令仅修改其直接引用的方法；任何重写的方法不会被访问转换。建议确保转换的方法没有非转换的重写方法，否则 JVM 会抛出错误。
 
-Examples of methods that can be safely transformed are `final` methods (or methods in `final` classes), and `static` methods. `private` methods are generally safe as well; however, they could cause unintentional overrides in any subtypes, so some additional manual validation should be performed.
+可以安全转换的方法包括 `final` 方法（或 `final` 类中的方法）和 `static` 方法。`private` 方法通常也很安全，但可能会在子类型中导致意外的重写，因此需要进行额外的手动验证。
 :::
 
-### Targets and Directives
+### 目标和指令
 
-#### Classes
+#### 类
 
-To target classes:
-
-```
-<access modifier> <fully qualified class name>
-```
-
-Inner classes are denoted by combining the fully qualified name of the outer class and the name of the inner class with a `$` as separator.
-
-#### Fields
-
-To target fields:
+要定位类：
 
 ```
-<access modifier> <fully qualified class name> <field name>
+<访问修饰符> <完全限定类名>
 ```
 
-#### Methods
+内部类通过外部类的完全限定名和内部类名组合，并用 `$` 分隔。
 
-Targeting methods require a special syntax to denote the method parameters and return type:
+#### 字段
 
-```
-<access modifier> <fully qualified class name> <method name>(<parameter types>)<return type>
-```
-
-##### Specifying Types
-
-Also called "descriptors": see the [Java Virtual Machine Specification, SE 21, sections 4.3.2 and 4.3.3][jvmdescriptors] for more technical details.
-
-- `B` - `byte`, a signed byte
-- `C` - `char`, a Unicode character code point in UTF-16
-- `D` - `double`, a double-precision floating-point value
-- `F` - `float`, a single-precision floating-point value
-- `I` - `integer`, a 32-bit integer
-- `J` - `long`, a 64-bit integer
-- `S` - `short`, a signed short
-- `Z` - `boolean`, a `true` or `false` value
-- `[` - references one dimension of an array
-    - Example: `[[S` refers to `short[][]`
-- `L<class name>;` - references a reference type
-    - Example: `Ljava/lang/String;` refers to `java.lang.String` reference type _(note the use of slashes instead of periods)_
-- `(` - references a method descriptor, parameters should be supplied here or nothing if no parameters are present
-    - Example: `<method>(I)Z` refers to a method that requires an integer argument and returns a boolean
-- `V` - indicates a method returns no value, can only be used at the end of a method descriptor
-    - Example: `<method>()V` refers to a method that has no arguments and returns nothing
-
-### Examples
+要定位字段：
 
 ```
-# Makes public the ByteArrayToKeyFunction interface in Crypt
+<访问修饰符> <完全限定类名> <字段名>
+```
+
+#### 方法
+
+定位方法需要使用特殊语法来表示方法参数和返回类型：
+
+```
+<访问修饰符> <完全限定类名> <方法名>(<参数类型>)<返回类型>
+```
+
+##### 指定类型
+
+也称为“描述符”：有关更多技术细节，请参阅 [Java 虚拟机规范，SE 21，第 4.3.2 和 4.3.3 节][jvmdescriptors]。
+
+- `B` - `byte`，有符号字节
+- `C` - `char`，UTF-16 中的 Unicode 字符代码点
+- `D` - `double`，双精度浮点值
+- `F` - `float`，单精度浮点值
+- `I` - `integer`，32 位整数
+- `J` - `long`，64 位整数
+- `S` - `short`，有符号短整型
+- `Z` - `boolean`，`true` 或 `false` 值
+- `[` - 表示数组的一维
+    - 示例：`[[S` 表示 `short[][]`
+- `L<class name>;` - 表示引用类型
+    - 示例：`Ljava/lang/String;` 表示 `java.lang.String` 引用类型（注意使用斜杠而不是点）
+- `(` - 表示方法描述符，参数应在此处提供，如果没有参数则为空
+    - 示例：`<method>(I)Z` 表示一个需要整数参数并返回布尔值的方法
+- `V` - 表示方法不返回值，仅可用于方法描述符的末尾
+    - 示例：`<method>()V` 表示一个没有参数且不返回值的方法
+
+### 示例
+
+```
+# 将 Crypt 中的 ByteArrayToKeyFunction 接口设为 public
 public net.minecraft.util.Crypt$ByteArrayToKeyFunction
 
-# Makes protected and removes the final modifier from 'random' in MinecraftServer
+# 将 MinecraftServer 中的 'random' 字段设为 protected 并移除 final 修饰符
 protected-f net.minecraft.server.MinecraftServer random
 
-# Makes public the 'makeExecutor' method in Util,
-# accepting a String and returns a TracingExecutor
+# 将 Util 中的 'makeExecutor' 方法设为 public，
+# 接受一个 String 并返回一个 TracingExecutor
 public net.minecraft.Util makeExecutor(Ljava/lang/String;)Lnet/minecraft/TracingExecutor;
 
-# Makes public the 'leastMostToIntArray' method in UUIDUtil,
-# accepting two longs and returning an int[]
+# 将 UUIDUtil 中的 'leastMostToIntArray' 方法设为 public，
+# 接受两个 long 并返回一个 int[]
 public net.minecraft.core.UUIDUtil leastMostToIntArray(JJ)[I
 ```
 

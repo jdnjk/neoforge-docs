@@ -2,7 +2,7 @@
 sidebar_position: 3
 ---
 
-# Third-Party Launchers
+# 第三方启动器
 
 Due to the size and popularity of the modded Minecraft community, several third-party launchers for NeoForge (and other mod loaders) have established themselves in the community. Each of them comes with a slightly different set of features, and in many regards, the choice of launcher comes down to personal preference (there is no "best" launcher). This article aims to give an overview over the most popular choices, in alphabetical order.
 
