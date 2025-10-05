@@ -5,115 +5,115 @@ sidebar_position: 0
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# NeoForge User Guide
+# NeoForge 用户指南
 
-Whether you are a regular player, pack developer or server administrator, this guide is intended to help you through the process of preparing your computer to run NeoForge, as well as answer some frequently asked questions.
+无论您是普通玩家、整合包开发者还是服务器管理员，本指南旨在帮助您准备计算机以运行 NeoForge，并解答一些常见问题。
 
-The guide mainly aims to help you install NeoForge using the official Minecraft launcher provided by Mojang. There are also a number of third-party launchers that mostly automate this process for you, some of which are mentioned in the article on [third-party launchers][launchers].
+本指南主要帮助您使用 Mojang 提供的官方 Minecraft 启动器安装 NeoForge。此外，还有一些第三方启动器可以为您自动化此过程，其中一些在[第三方启动器][launchers]文章中提到。
 
 ## Java
 
-In order to run NeoForge, you will first need to have Java installed on your computer. Java is the programming language Minecraft and NeoForge are written in. While Minecraft uses the launcher to download the required Java version, NeoForge requires you to install Java yourself.
+要运行 NeoForge，您需要先在计算机上安装 Java。Java 是 Minecraft 和 NeoForge 所使用的编程语言。虽然 Minecraft 使用启动器下载所需的 Java 版本，但 NeoForge 需要您自行安装 Java。
 
-The required Java version differs depending on what Minecraft version you want to run:
+所需的 Java 版本取决于您想运行的 Minecraft 版本：
 
-| Minecraft version | Java version |
-|:-----------------:|:------------:|
+| Minecraft 版本 | Java 版本 |
+|:--------------:|:---------:|
 |   1.20.2-1.20.4   |      17      |
-|   1.20.5-latest   |      21      |
+|   1.20.5-最新版本   |      21      |
 
 :::info
-While NeoForge exists for Minecraft **1.20.1**, we recommend using Forge on that version instead, since it had longer support for Minecraft 1.20.1. We only recommend using NeoForge on Minecraft 1.20.2 and newer.
+虽然 NeoForge 支持 Minecraft **1.20.1**，但我们建议在该版本上使用 Forge，因为 Forge 对 Minecraft 1.20.1 提供了更长时间的支持。我们仅建议在 Minecraft 1.20.2 及更新版本上使用 NeoForge。
 :::
 
-### Testing For Java
+### 检测是否已安装 Java
 
-_If you are sure that you do not have Java installed, you can skip to [Installing Java][installingjava]._
+_如果您确定未安装 Java，可以跳过此部分，直接前往[安装 Java][installingjava]。_
 
-In many cases, you may already have Java installed on your system. As such, you need to verify if the version is correct.
+在许多情况下，您的系统可能已经安装了 Java。因此，您需要验证版本是否正确。
 
-- Open a terminal. The way to do this depends on the operating system you are running:
+- 打开终端。具体操作因操作系统而异：
 
 <Tabs defaultValue="windows">
   <TabItem value="windows" label="Windows">
-In the Start Menu at the bottom left, search for `Command Prompt` and press Enter.
+在左下角的开始菜单中，搜索 `命令提示符` 并按 Enter。
   </TabItem>
   <TabItem value="macos" label="MacOS">
-Open Finder. In Finder, open the Applications/Utilities folder and double-click Terminal.
+打开 Finder。在 Finder 中，打开 Applications/Utilities 文件夹并双击 Terminal。
   </TabItem>
   <TabItem value="linux" label="Linux">
-Open the terminal for your Linux distribution. Common names would be `GNOME Terminal` or `Konsole`, however it may vary depending on your exact setup.
+打开您的 Linux 发行版的终端。常见名称可能是 `GNOME Terminal` 或 `Konsole`，但可能因具体设置而异。
   </TabItem>
 </Tabs>
 
-- Type the following command: `java -version` and press Enter.
-- If an error is displayed, then Java is not installed, and you can skip to the [Installing Java][installingjava] section.
-- If Java is installed, you should see the following output (or something similar):
+- 输入以下命令：`java -version` 并按 Enter。
+- 如果显示错误，则说明未安装 Java，您可以跳至[安装 Java][installingjava]部分。
+- 如果已安装 Java，您应该看到以下输出（或类似内容）：
 ```
 openjdk version "21.0.4" 2024-07-16 LTS
 OpenJDK Runtime Environment Temurin-21.0.4+7 (build 21.0.4+7-LTS)
 OpenJDK 64-Bit Server VM Temurin-21.0.4+7 (build 21.0.4+7-LTS, mixed mode, sharing)
 ```
-- Verify that the first number after the `version` bit matches the Java version needed for the desired Minecraft version.
-  - E.g., `openjdk version "21.0.4" 2024-07-16 LTS` is a Java 21 version and as such fit for Minecraft 1.20.5 and newer.
-  - If the version does not match, then you will have to [install the correct Java version][installingjava].
-- If everything went smoothly, continue to [Installing NeoForge][installingneoforge].
+- 验证 `version` 后的第一个数字是否与所需的 Minecraft 版本匹配。
+  - 例如，`openjdk version "21.0.4" 2024-07-16 LTS` 是 Java 21 版本，因此适用于 Minecraft 1.20.5 及更新版本。
+  - 如果版本不匹配，则需要[安装正确的 Java 版本][installingjava]。
+- 如果一切正常，请继续阅读[安装 NeoForge][installingneoforge]。
 
-### Installing Java
+### 安装 Java
 
-The way to install Java depends on your operating system. Always make sure you're grabbing the correct version of Java, and make sure you grab the 64-bit version, as modern versions of Minecraft do no longer support 32-bit versions of Java.
+安装 Java 的方法取决于您的操作系统。请确保下载正确版本的 Java，并确保下载 64 位版本，因为现代版本的 Minecraft 不再支持 32 位 Java。
 
 <Tabs defaultValue="windows">
   <TabItem value="windows" label="Windows">
-Download the JDK `.msi` from [the Adoptium project](https://adoptium.net/temurin/releases/?version=21&os=windows). Open the `.msi` file you just downloaded in your file system, double-click it, and run through the installer.
+从 [Adoptium 项目](https://adoptium.net/temurin/releases/?version=21&os=windows) 下载 JDK `.msi` 文件。在文件系统中打开刚下载的 `.msi` 文件，双击并完成安装程序。
   </TabItem>
-  <TabItem value="windows_server" label="Windows (Server)">
-Download the JDK using the following `winget` command (change the version number if necessary):
+  <TabItem value="windows_server" label="Windows（服务器）">
+使用以下 `winget` 命令下载 JDK（如有必要，请更改版本号）：
 
 ```
 winget install -e --id=Microsoft.OpenJDK.21
 ```
   </TabItem>
   <TabItem value="macos" label="MacOS">
-Download the JDK `.pkg` from [the Adoptium project](https://adoptium.net/temurin/releases/?version=21&os=mac). Open the `.pkg` file you just downloaded in your file system, double-click it, and run through the installer.
+从 [Adoptium 项目](https://adoptium.net/temurin/releases/?version=21&os=mac) 下载 JDK `.pkg` 文件。在文件系统中打开刚下载的 `.pkg` 文件，双击并完成安装程序。
   </TabItem>
   <TabItem value="linux" label="Linux">
-Open the terminal for your Linux distribution. Common names would be `GNOME Terminal` or `Konsole`, however it may vary depending on your exact setup.
+打开您的 Linux 发行版的终端。常见名称可能是 `GNOME Terminal` 或 `Konsole`，但可能因具体设置而异。
 
-Then, use your system's package manager (e.g. `apt` on Ubuntu and Debian, `yum` on CentOS, `dnf` on Fedora, or `pacman` on Arch) to install Java. The package's exact name may vary, but something like `openjdk-21` (swap out version number if needed) is usually a good shot.
+然后，使用系统的包管理器（例如 Ubuntu 和 Debian 上的 `apt`，CentOS 上的 `yum`，Fedora 上的 `dnf`，或 Arch 上的 `pacman`）安装 Java。包的确切名称可能有所不同，但通常 `openjdk-21`（如有必要，请更换版本号）是一个不错的选择。
 
-Some distributions also provide documentation and/or additional tools for installing Java:
+一些发行版还提供了安装 Java 的文档和/或附加工具：
 
 <ul>
-  <li>[Installing Java on Arch][arch]</li>
-  <li>[Installing Java on Debian][debian]</li>
-  <li>[Installing Java on Fedora][fedora]</li>
-  <li>[Installing Java on Ubuntu][ubuntu]</li>
+  <li>[在 Arch 上安装 Java][arch]</li>
+  <li>[在 Debian 上安装 Java][debian]</li>
+  <li>[在 Fedora 上安装 Java][fedora]</li>
+  <li>[在 Ubuntu 上安装 Java][ubuntu]</li>
 </ul>
 
   </TabItem>
 </Tabs>
 
-After installing, it is recommended to [test for Java][testingforjava] again, just to make sure that everything went well.
+安装完成后，建议再次[检测是否已安装 Java][testingforjava]，以确保一切正常。
 
-## Installing NeoForge
+## 安装 NeoForge
 
-Once you have successfully installed Java, you can now install NeoForge itself.
+成功安装 Java 后，您现在可以安装 NeoForge 本体。
 
-- If you want to play with NeoForge in singleplayer or to join a NeoForge server, please read [Installing a NeoForge Client][client].
-- If you want to run a server using NeoForge, please read [Installing a NeoForge Server][server].
+- 如果您想在单人模式下使用 NeoForge 或加入 NeoForge 服务器，请阅读[安装 NeoForge 客户端][client]。
+- 如果您想使用 NeoForge 运行服务器，请阅读[安装 NeoForge 服务器][server]。
 
-## Further Help
+## 获取更多帮助
 
-This guide covers most of the issues you may face as a user of NeoForge, however it is not intended to be exhaustive, and you may run into a problem which is not covered here.
+本指南涵盖了 NeoForge 用户可能遇到的大多数问题，但并非详尽无遗，您可能会遇到未在此处涵盖的问题。
 
-Common problems can be found in the [Troubleshooting & FAQ][faq] article. For further support, see the FAQ's [Getting Support][support] section.
+常见问题可以在[故障排除与常见问题解答][faq]文章中找到。有关更多支持，请参阅 FAQ 的[获取支持][support]部分。
 
 [arch]: https://wiki.archlinux.org/title/Java
 [client]: client.md
 [debian]: https://wiki.debian.org/Java
 [faq]: faq.md
-[fedora]: https://docs.fedoraproject.org/en-US/quick-docs/installing-java
+[fedora]: https://docs.fedoraproject.org/zh_Hans/quick-docs/installing-java
 [installingjava]: #installing-java
 [installingneoforge]: #installing-neoforge
 [launchers]: launchers.md

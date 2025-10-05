@@ -35,27 +35,27 @@ function createContentDocs(id, label) {
   });
 }
 
-createContentDocs("toolchain", "Toolchain Features");
-createContentDocs("primer", "Primers");
-createContentDocs("user", "User Guide");
-createContentDocs("modpack", "Modpack Development");
+createContentDocs("toolchain", "工具链特性");
+createContentDocs("primer", "入门指南");
+createContentDocs("user", "用户指南");
+createContentDocs("modpack", "整合包开发");
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "NeoForged docs",
-  tagline: "The better mod loader",
+  title: "NeoForged 文档",
+  tagline: "更好的模组加载器",
   favicon: "img/favicon.ico",
 
-  // Set the production url of your site here
-  url: "https://docs.neoforged.net",
-  // Set the /<baseUrl>/ pathname under which your site is served
-  // For GitHub pages deployment, it is often '/<projectName>/'
+  // 在此处设置站点的生产 URL
+  url: "https://zh-neoforge.netlify.app",
+  // 设置站点服务的 /<baseUrl>/ 路径名
+  // 对于 GitHub Pages 部署，通常是 '/<projectName>/'
   baseUrl: "/",
 
-  // GitHub pages deployment config.
-  // If you aren't using GitHub pages, you don't need these.
-  organizationName: "neoforged", // Usually your GitHub org/user name.
-  projectName: "documentation", // Usually your repo name.
+  // GitHub Pages 部署配置。
+  // 如果您不使用 GitHub Pages，则不需要这些配置。
+  organizationName: "jdnjk", // 通常是您的 GitHub 组织/用户名。
+  projectName: "neoforge-docs", // 通常是您的仓库名称。
 
   onBrokenLinks: "throw", // Yay multi versioned-docs sites
   onBrokenMarkdownLinks: "throw",
@@ -64,8 +64,8 @@ const config = {
   // metadata like html lang. For example, if your site is Chinese, you may want
   // to replace "en" with "zh-Hans".
   i18n: {
-    defaultLocale: "en",
-    locales: ["en"],
+    defaultLocale: "zh-Hans",
+    locales: ["zh-Hans"],
   },
 
   presets: [
@@ -99,12 +99,12 @@ const config = {
         respectPrefersColorScheme: true
       },
 
-      // Replace with your project's social card
+      // 替换为您项目的社交卡片
       //image: 'img/docusaurus-social-card.jpg',
       navbar: {
-        title: "Homepage",
+        title: "首页",
         logo: {
-          alt: "NeoForged Logo",
+          alt: "NeoForged 标志",
           src: "img/logo.svg",
         },
         items: [
@@ -112,7 +112,7 @@ const config = {
             type: "docSidebar",
             sidebarId: "mainSidebar",
             position: "left",
-            label: "NeoForge Documentation",
+            label: "NeoForge 文档",
           }
         ]
         .concat(navbarItems)
@@ -123,7 +123,7 @@ const config = {
           },
           {
             to: "/contributing",
-            label: "Contributing",
+            label: "贡献指南",
             position: "right",
           },
           {
@@ -137,30 +137,30 @@ const config = {
         style: "dark",
         links: [
           {
-            title: "Docs",
+            title: "文档",
             items: [
               {
                 to: "/docs/gettingstarted/",
-                label: "NeoForge Documentation",
+                label: "NeoForge 文档",
               },
             ]
             .concat(footerItems)
             .concat([
               {
                 to: "/contributing",
-                label: "Contributing to the Documentation"
+                label: "参与文档贡献"
               }
             ]),
           },
           {
-            title: "Links",
+            title: "链接",
             items: [
               {
                 label: "Discord",
                 href: "https://discord.neoforged.net/",
               },
               {
-                label: "Main Website",
+                label: "主网站",
                 href: "https://neoforged.net/",
               },
               {
@@ -170,7 +170,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()}, under the MIT license. Built with Docusaurus.`,
+        copyright: `版权所有 © ${new Date().getFullYear()}，遵循 MIT 许可证。由 Docusaurus 构建。`,
       },
       prism: {
         theme: lightTheme,
@@ -178,10 +178,10 @@ const config = {
         additionalLanguages: ["java", "gradle", "toml", "groovy", "kotlin", "javascript", "json", "json5", "properties"],
       },
       algolia: {
-        // The application ID provided by Algolia
+        // Algolia 提供的应用程序 ID
         appId: '05RJFT798Z',
   
-        // Public API key: it is safe to commit it
+        // 公共 API 密钥：提交它是安全的
         apiKey: 'b198aa85c7f2ee9364d105ef0be4d81a',
   
         indexName: 'neoforged'
@@ -195,4 +195,5 @@ const config = {
     themes: ['@docusaurus/theme-mermaid']
 };
 
+module.exports = config;
 module.exports = config;
