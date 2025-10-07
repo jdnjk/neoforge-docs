@@ -22,7 +22,7 @@ import Card from "../theme/Card.tsx";
     <div class="row">
         <div class="col category">
             <Card
-                title="工具链特性"
+                title="工具链"
                 body="了解 NeoForged 通过其 Gradle 插件提供的功能。"
                 link="/toolchain/docs/"
                 linkTitle="了解更多"
