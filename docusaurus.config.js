@@ -35,7 +35,7 @@ function createContentDocs(id, label) {
   });
 }
 
-createContentDocs("toolchain", "工具链特性");
+createContentDocs("toolchain", "工具链");
 createContentDocs("primer", "迁移");
 createContentDocs("user", "用户指南");
 createContentDocs("modpack", "整合包开发");
